@@ -271,7 +271,7 @@ def annotate_contig(
         print("Repeatmasking contig TE sequences failed, exiting...")
         sys.exit(1)
 
-    ## parse and merge
+    ## parse, sort and merge
     te2contig_rm = out + "/" + sample_name + ".te2contig_rm.bed"
     with open(contig_te_repeatmasked, "r") as input, open(te2contig_rm, "w") as output:
         for line in input:
@@ -288,8 +288,15 @@ def annotate_contig(
                 output.write(out_line + "\n")
     print("Done\n")
 
+    
+    te2contig_rm_sort = out + "/" + sample_name + ".te2contig_rm_sort.bed"
+    command = "bedtools sort -i " + te2contig_rm
+    with open(te2contig_rm_sort, "w") as output:
+        subprocess.call(command, shell=True, stdout=output)
+    
+    
     contig_rm_annotation = out + "/" + sample_name + ".te2contig_rm.merge.bed"
-    command = 'bedtools merge -c 4,6 -o distinct -delim "|" -i ' + te2contig_rm
+    command = 'bedtools merge -c 4,6 -o distinct -delim "|" -i ' + te2contig_rm_sort
     with open(contig_rm_annotation, "w") as output:
         subprocess.call(command, shell=True, stdout=output)
     # os.remove(te2contig_rm)
