@@ -46,7 +46,7 @@ def alignment(bam, read, reference, out, sample_name, thread, presets):
                    "map-ont",
                    "--MD",
                    "-t",
-                   "20",
+                   str(thread),
                    reference,
                    read,
                 ],
