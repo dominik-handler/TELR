@@ -101,8 +101,13 @@ def prep_assembly(
 
                 ins_chr = entry[0]
                 ins_breakpoint = round((int(entry[1]) + int(entry[2])) / 2)
-                start = ins_breakpoint - window
-                end = ins_breakpoint + window
+                if ins_breakpoint < 1000:
+                    start = 0
+                    end = ins_breakpoint + window
+                else:
+                    start = ins_breakpoint - window
+                    end = ins_breakpoint + window
+                    
                 reads = set()
                 # coverage = 0
                 for read in samfile.fetch(ins_chr, start, end):
